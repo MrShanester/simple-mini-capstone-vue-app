@@ -57,9 +57,7 @@ export default {
     },
     showHidden: function () {
       this.hidden = "You're the Best!";
-      setTimeout(function () {
-        this.hidden = "";
-      }, 2000);
+      this.setTimeout();
     },
     createProduct: function () {
       axios.post("http://localhost:3000/products", this.newProductParams).then((response) => {
