@@ -1,7 +1,16 @@
 <template>
   <div class="home">
     <h1>{{ message }}</h1>
+    <p>Product Name:</p>
+    <input type="string" v-model="newProductParams.name" />
+    <p>Product Description:</p>
+    <input type="text" v-model="newProductParams.description" />
+    <p>Product Price:</p>
+    <input type="integer" v-model="newProductParams.price" />
+    <p>Product Image URL:</p>
+    <input type="string" v-model="newProductParams.image_url" />
     <p></p>
+    <button v-on:click="createProduct()">Create Product!</button>
     <div v-for="product in products" v-bind:key="product.id">
       <h2>{{ product.name }}</h2>
       <img v-bind:src="product.image_url" v-bind:alt="product.title" />
@@ -34,6 +43,7 @@ export default {
       message: "Welcome To The Shop",
       products: [],
       hidden: "",
+      newProductParams: {},
     };
   },
   created: function () {
@@ -47,6 +57,19 @@ export default {
     },
     showHidden: function () {
       this.hidden = "You're the Best!";
+      setTimeout(function () {
+        this.hidden = "";
+      }, 2000);
+    },
+    createProduct: function () {
+      axios.post("http://localhost:3000/products", this.newProductParams).then((response) => {
+        console.log(response.data);
+        this.products.push(response.data);
+      });
+      this.newProductParams.name = "";
+      this.newProductParams.description = "";
+      this.newProductParams.price = "";
+      this.newProductParams.image_url = "";
     },
   },
 };
