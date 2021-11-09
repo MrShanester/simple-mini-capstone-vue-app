@@ -8,6 +8,8 @@
       <p>Price: ${{ product.price }}</p>
       <p>------------------------------------</p>
     </div>
+    <button v-on:click="showHidden()">Click to See a Hidden Message!</button>
+    <p>{{ hidden }}</p>
   </div>
 </template>
 
@@ -31,6 +33,7 @@ export default {
     return {
       message: "Welcome To The Shop",
       products: [],
+      hidden: "",
     };
   },
   created: function () {
@@ -41,6 +44,9 @@ export default {
       axios.get("http://localhost:3000/products").then((response) => {
         this.products = response.data;
       });
+    },
+    showHidden: function () {
+      this.hidden = "You're the Best!";
     },
   },
 };
