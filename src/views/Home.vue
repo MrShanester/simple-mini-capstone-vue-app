@@ -19,9 +19,20 @@
       <dialog id="product-details">
         <form method="dialog">
           <h2>Product Info:</h2>
-          <p>Name: {{ name }}</p>
-          <p>Description: {{ description }}</p>
-          <p>Price: ${{ price }}</p>
+          <p>
+            Name:
+            <input type="text" v-model="currentProduct.name" />
+          </p>
+          <p>
+            Description:
+            <input type="text" v-model="currentProduct.description" />
+          </p>
+          <p>
+            Price:
+            <input type="integer" v-model="currentProduct.price" />
+          </p>
+          <button v-on:click="updateProduct(currentProduct)">Update Product</button>
+          <button v-on:click="destroyProduct(currentProduct)">Delete Product</button>
           <button>Close</button>
         </form>
       </dialog>
@@ -43,6 +54,15 @@ h1 {
 img {
   width: 350px;
 }
+
+.home {
+  margin: 0 auto;
+  padding: 10px 25px;
+  border: 3px solid;
+  border-image: linear-gradient(135deg, #ff0000 0%, #49ff33 25%, #3364ff 50%, #f6ff33 75%, #ff00a8 100%) 1;
+
+  background: rgb(228, 226, 226);
+}
 </style>
 
 <script>
@@ -55,9 +75,7 @@ export default {
       products: [],
       hidden: "",
       newProductParams: {},
-      name: "",
-      description: "",
-      price: "",
+      currentProduct: {},
     };
   },
   created: function () {
@@ -84,11 +102,21 @@ export default {
       this.newProductParams.image_url = "";
     },
     showProduct: function (product) {
-      this.name = product.name;
-      this.description = product.description;
-      this.price = product.price;
+      this.currentProduct = product;
       console.log(product);
       document.querySelector("#product-details").showModal();
+    },
+    updateProduct: function (product) {
+      axios.patch("http://localhost:3000/products/" + product.id, product).then((response) => {
+        console.log("Product Created", response.data);
+      });
+    },
+    destroyProduct: function (product) {
+      axios.delete("http://localhost:3000/products/" + product.id).then((response) => {
+        console.log("Product Destroyed", response.data);
+        var index = this.products.indexOf(product);
+        this.products.splice(index, 1);
+      });
     },
   },
 };
