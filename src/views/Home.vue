@@ -15,8 +15,19 @@
       <h2>{{ product.name }}</h2>
       <img v-bind:src="product.image_url" v-bind:alt="product.title" />
       <p>Price: ${{ product.price }}</p>
+      <button v-on:click="showProduct(product)">Show More Info</button>
+      <dialog id="product-details">
+        <form method="dialog">
+          <h2>Product Info:</h2>
+          <p>Name: {{ name }}</p>
+          <p>Description: {{ description }}</p>
+          <p>Price: ${{ price }}</p>
+          <button>Close</button>
+        </form>
+      </dialog>
       <p>------------------------------------</p>
     </div>
+
     <button v-on:click="showHidden()">Click to See a Hidden Message!</button>
     <p>{{ hidden }}</p>
   </div>
@@ -44,6 +55,9 @@ export default {
       products: [],
       hidden: "",
       newProductParams: {},
+      name: "",
+      description: "",
+      price: "",
     };
   },
   created: function () {
@@ -68,6 +82,13 @@ export default {
       this.newProductParams.description = "";
       this.newProductParams.price = "";
       this.newProductParams.image_url = "";
+    },
+    showProduct: function (product) {
+      this.name = product.name;
+      this.description = product.description;
+      this.price = product.price;
+      console.log(product);
+      document.querySelector("#product-details").showModal();
     },
   },
 };
